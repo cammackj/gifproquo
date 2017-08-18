@@ -1,6 +1,7 @@
 var express = require('express')
 var router = express.Router()
 var gifResponses = require('../models/gif-response')
+var comments = require('../models/comment')
 
 router
 
@@ -20,6 +21,12 @@ router
 			})
 			.catch(next)
 	})
+	.get('/:id/comments', (req, res, next) => {
+		comments.find({ gifId: req.params.id })
+			.then(comments => {
+				res.send(comments)
+			}).catch(next)
+	}) // api/galaxies/329409238/stars
 	.post('/', (req, res, next) => {
 		gifResponses.create(req.body)
 			.then(gifResponse => {
