@@ -7,6 +7,7 @@ router
 
 	.get('/', (req, res, next) => {
 		// TODO: DONT ALLOW USER TO GET ALL QUOTES
+		console.log("getting quotes")
 		quotes.find(req.query)
 			.then(quotes => {
 				res.send(quotes)

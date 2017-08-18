@@ -1,6 +1,6 @@
 var express = require('express')
 var router = express.Router()
-var gifResponses = require('../models/gifResponse')
+var gifResponses = require('../models/gif-response')
 
 router
 

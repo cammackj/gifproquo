@@ -6,8 +6,9 @@ var quoteSchema = new mongoose.Schema({
 	expired:{type:Boolean, default:false},
 	categories:{type:Object}, 
 	upVotes:{type:Object}, 
-	downVotes:{type:Object}
-	
+	downVotes:{type:Object},
+	userId:{type:ObjectId, ref:"User", required: true},
+	content:{type:String, required:true}
 })
 
 var Quote = mongoose.model("Quote", quoteSchema);
