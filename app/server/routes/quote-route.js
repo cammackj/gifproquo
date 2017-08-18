@@ -31,6 +31,7 @@ router
 	.post('/', (req, res, next) => {
 		quotes.create(req.body)
 			.then(quote => {
+				quote.created = Date.now() / 1000;
 				res.send(quote)
 			}).catch(next)
 	})
