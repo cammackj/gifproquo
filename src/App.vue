@@ -1,17 +1,31 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <hello></hello>
-  </div>
+
+  <!--NAVBAR-->
+  <nav class="navbar-primary">
+    <div class="nav-wrapper light-blue accent-4">
+      <a href="#" class="brand-logo center">GifProQuo</a>
+      <ul id="nav-mobile" class="left hide-on-med-and-down">
+        <li><a href="sass.html">Sign In</a></li>
+        <li><a href="badges.html">Create Account</a></li>
+        <li><a href="collapsible.html">LeaderBoard</a></li>
+      </ul>
+    </div>
+  </nav>
+
+<CardCarousel></CardCarousel>
+  
+  
+</div>
 </template>
 
 <script>
-import Hello from './components/Hello'
+import CardCarousel from './components/CardCarousel'
 
 export default {
   name: 'app',
   components: {
-    Hello
+    CardCarousel
   }
 }
 </script>
@@ -23,6 +37,17 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  background: url("http://i.imgur.com/vAu0EVA.jpg");
+  background-size: cover;
+  padding-bottom: 30rem;
+  height: 100%;
 }
+
+.navbar-primary {
+  font-family: "Permanent Marker";
+  height: 5vh;
+  color: white;
+}
+
+
 </style>
