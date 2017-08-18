@@ -1,7 +1,7 @@
 let router = require('express').Router();
 let Users = require('../models/user');
 
-router.post('/register', (req, res) => {
+router.post('/register', (req, res, next) => {
 	Users.create(req.body)
 		.then(user => {
 			req.session.uid = user._id;
@@ -13,9 +13,7 @@ router.post('/register', (req, res) => {
 				data: user
 			})
 		})
-		.catch(err => {
-			res.send({ error: err })
-		})
+		.catch(next)
 })
 
 router.post('/login', (req, res) => {
@@ -67,3 +65,19 @@ router.get('/authenticate', (req, res) => {
 			})
 		})
 })
+
+router.use('/', (err, req, res, next) => {
+	if (err) {
+		res.send(418, {
+			success: false,
+			error: err.message
+		})
+	} else {
+		res.send(400, {
+			success: false,
+			error: 'Something failed please try again later'
+		})
+	}
+})
+
+module.exports = router

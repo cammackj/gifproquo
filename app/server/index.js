@@ -1,13 +1,13 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 // var mongoose = require("mongoose");
-// var authRoutes = require('./authentication/auth-routes');
-// var sessions = require('./authentication/sessions');
+var authRoutes = require('./authentication/auth-routes');
+var sessions = require('./authentication/sessions');
 var categoryRoute = require('./routes/category-route')
 var commentRoute = require('./routes/comment-route')
 var gifResponseRoute = require('./routes/gif-response-route')
 var quoteRoute = require('./routes/quote-route')
-// var userRoute = require('./routes/user-route')
+var userRoute = require('./routes/user-route')
 var server = express();
 var port = 3000;
 
@@ -19,8 +19,8 @@ server.options('*', cors())
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: true }));
 
-// server.use('/api', authRoutes);
-// server.use(sessions);
+server.use(sessions);
+server.use('/', authRoutes);
 
 server.use('/api/categories', categoryRoute);
 server.use('/api/comments', commentRoute);
