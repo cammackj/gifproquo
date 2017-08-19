@@ -3,7 +3,7 @@
 
     
     <div class="row">
-      <div class="col m8 offset-m2">
+      <div class="col m12 offset-m7 quote-column">
         <div class="hoverable card glass quote-card">
           <div class="card-content">
             <blockquote class="card-title quote">"{{quote}}" - unknown </blockquote>
@@ -39,5 +39,8 @@
   .glass {
     background: rgba(0, 0, 0, .5);
     color: white;
+  }
+  .quote-column {
+    position: center;
   }
 </style>

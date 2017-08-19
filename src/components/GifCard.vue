@@ -3,7 +3,7 @@
 
         <div class="card-action">
 
-            <div class="col m6">
+            <div class="col m12">
                 <div class="hoverable card glass">
                     <div class="card-image">
                         <img :src="gif.gifUrl">

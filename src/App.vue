@@ -44,7 +44,7 @@
       <div class="col m2 paginate-button">
         <i @click="changeQuote(-1)" class="material-icons white-text fixed" style="font-size: 6vw">remove_circle_outline</i>
       </div>
-      <div class="col m8 gif-card" v-for="gif in gifs">
+      <div class="col m4 gif-card" v-for="gif in gifs">
         <GifCard :gif = "gif"></GifCard>
       </div>
       <div class="col m2 paginate-button">
