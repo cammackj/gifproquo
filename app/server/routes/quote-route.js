@@ -60,6 +60,9 @@ router
 					res.send({ message: 'You are not authorized to remove this quote' })
 				}
 			}).catch(next)
+		// quotes.find({}).then(quotes => {
+		// 	quotes.forEach(quote => quote.remove())
+		// })
 	})
 
 // ERROR HANDLER
