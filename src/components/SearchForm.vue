@@ -2,13 +2,13 @@
     <div class="SearchForm">
 
         <div class="row">
-            <div class="bottom-fixed col m10 offset-m1">
+            <div class="bottom-fixed col m9">
                 <div class="hoverable card glass">
                     <div class="card-content">
                         <div class="col m11">
                             <form @submit.prevent="search()">
                                 <div class="col md12"><input type="text" v-model="query"></div>
-                                <div class="col md2"><button type="submit" class="btn">search</button></div> 
+                                <div class="col md2"><button type="submit" class="btn">search</button></div>
                             </form>
                         </div>
                         <div class="col m1">
@@ -29,12 +29,23 @@
                     </div>
                 </div>
             </div>
+
+            <div class="bottom-fixed card hoverable glass col m3 offset-m9">
+                <div class="row">
+
+                    <form>
+                        <div class="input-field">
+                            <div class="col md12"><input type="text" ></div>
+                                <div class="col md2"><button type="submit" class="btn">Submit</button></div>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
         </div>
     </div>
-    </div>
 
-
-    </div>
 </template>
 
 <script>
@@ -76,8 +87,9 @@
         margin-left: .75vw;
         margin-right: .75vw;
     }
+
     .glass {
-    background: rgba(0, 0, 0, .5);
-    color: white;
-  }
+        background: rgba(0, 0, 0, .5);
+        color: white;
+    }
 </style>

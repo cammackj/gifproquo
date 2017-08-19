@@ -9,7 +9,7 @@ var userSchema = new mongoose.Schema({
 	password: { type: String, required: true }
 })
 
-schema.pre('save', function (next) {
+userSchema.pre('save', function (next) {
 	var user = this;
 	if (!user.isModified('password')) {
 		return next();
@@ -26,7 +26,7 @@ schema.pre('save', function (next) {
 	});
 });
 
-schema.methods.validatePassword = function (password) {
+userSchema.methods.validatePassword = function (password) {
 	return new Promise((resolve, reject) => {
 		bcrypt.compare(password, this.password, function (err, isMatch) {
 			if (err || !isMatch) {

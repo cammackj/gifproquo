@@ -28,8 +28,8 @@ router
 	})
 	.post('/', (req, res, next) => {
 		// TODO: Check to see if quote is expired
-		if (!req.session.uid)
-			return res.send({ message: "You must be logged in to do that." })
+		// if (!req.session.uid)
+		// 	return res.send({ message: "You must be logged in to do that." })
 
 		gifResponses.create(req.body)
 			.then(gifResponse => {

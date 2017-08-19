@@ -37,15 +37,15 @@
       </div>
     </nav>
 
-    <QuoteCard :quote="quotes[quoteIndex].content" class="fixed quote-card"></QuoteCard>
+    <QuoteCard :quote="quotes.content" class="fixed quote-card"></QuoteCard>
     <div class="row">
 
 
       <div class="col m2 paginate-button">
         <i @click="changeQuote(-1)" class="material-icons white-text fixed" style="font-size: 6vw">remove_circle_outline</i>
       </div>
-      <div class="col m8 gif-card" v-for="{gif,index} in gifs">
-        <GifCard :gif = "gifs[index]"></GifCard>
+      <div class="col m8 gif-card" v-for="gif in gifs">
+        <GifCard :gif = "gif"></GifCard>
       </div>
       <div class="col m2 paginate-button">
         <i @click="changeQuote(1)" class="material-icons white-text fixed" style="font-size: 6vw">add_circle_outline</i>
@@ -79,7 +79,7 @@
         viewLogIn: false,
         viewRegister: false,
         quotes: store.state.quotes,
-        gifs: store.state.gifs,
+        gifs: store.state.gifResponses,
         quoteIndex: 0,
         accountUser: {
           username: '',
@@ -104,7 +104,8 @@
         store.getQuote(this.getGifs)
       },
       getGifs() {
-        store.getGifs(this.quoteIndex)
+        // store.getGifs(this.quoteIndex)
+        this.gifs = store.state.gifResponses
       },
       changeQuote(num) {
         if (this.quoteIndex + num >= 0) {
@@ -120,6 +121,11 @@
           store.register(this.accountUser)
       }
     
+    },
+    computed: {
+      // gifs() {
+      //   return store.state.gifResponses;
+      // }
     }
   }
 

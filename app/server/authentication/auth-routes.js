@@ -28,12 +28,13 @@ router.post('/register', (req, res, next) => {
 })
 
 router.post('/login', (req, res) => {
-	Users.findOne({ email: req.body.email.toLowerCase() })
+	console.log(req.body)
+	Users.findOne({ username: req.body.username.toLowerCase() })
 		.then(user => {
 			user.validatePassword(req.body.password)
 				.then(valid => {
 					if (!valid) {
-						return res.send({ error: "invalid Email or Password" });
+						return res.send({ error: "invalid username or Password" });
 					}
 					req.session.uid = user._id;
 					req.session.save();

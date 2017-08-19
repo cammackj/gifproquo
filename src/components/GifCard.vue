@@ -6,8 +6,8 @@
             <div class="col m6">
                 <div class="hoverable card glass">
                     <div class="card-image">
-                        <img src="https://media.giphy.com/media/3cWdJ89fJCqaI/giphy.gif">
-                        <span class="card-title">(Card Count)</span>
+                        <img :src="gif.gifUrl">
+                        <span class="card-title">{{gif.totalScore}}</span> 
                     </div>
                     <div class="card-content">
                         <div class="row"><a class="btn-floating waves-effect waves-light left red cardbutton"><i class="material-icons">keyboard_arrow_down</i></a>
@@ -48,9 +48,9 @@
             }
         },
         mounted() {
-            this.getComments().then(data => {
-                this.comments = data
-            })
+            // this.getComments().then(data => {
+            //     this.comments = data
+            // })
         }
     }
 
