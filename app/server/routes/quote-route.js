@@ -4,9 +4,10 @@ var quotes = require('../models/quote')
 var gifResponses = require('../models/gif-response')
 
 router
+	// TODO: DONT ALLOW USER TO GET ALL QUOTES
+	// Add methods to sort by age, and totalScore, include pagination
 	.get('/', (req, res, next) => {
-		// TODO: DONT ALLOW USER TO GET ALL QUOTES
-		quotes.find(req.query)
+		quotes.find({})
 			.then(quotes => {
 				res.send(quotes)
 			})
@@ -60,6 +61,8 @@ router
 					res.send({ message: 'You are not authorized to remove this quote' })
 				}
 			}).catch(next)
+
+		// Below code to empty out database. DO NOT USE UNLESS YOU KNOW WHAT YOU'RE DOING
 		// quotes.find({}).then(quotes => {
 		// 	quotes.forEach(quote => quote.remove())
 		// })
@@ -97,12 +100,12 @@ function updateUserVote(quote, userVote, userId) {
 	getTotalPoints(quote)
 }
 
+// Total points for quotes.
 function getTotalPoints(quote) {
 	var total = 0;
 	for (vote in quote.votes) {
 		total += quote.votes[vote]
 	}
-	console.log(total)
 	quote.totalPoints = total
 }
 
