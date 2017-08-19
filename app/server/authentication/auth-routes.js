@@ -2,16 +2,26 @@ let router = require('express').Router();
 let Users = require('../models/user');
 
 router.post('/register', (req, res, next) => {
-	Users.create(req.body)
-		.then(user => {
-			req.session.uid = user._id;
-			req.session.save();
-			user.password = null;
-			delete user.password;
-			res.send({
-				message: 'Successfully created user account',
-				data: user
+	var newUser = req.body
+	Users.find({})
+		.then(users => {
+			users.forEach(user => {
+				if (user.email == newUser.email || user.username == newUser.username)
+					return res.send({ message: "User already exists" })
 			})
+
+			Users.create(req.body)
+				.then(user => {
+					req.session.uid = user._id;
+					req.session.save();
+					user.password = null;
+					delete user.password;
+					res.send({
+						message: 'Successfully created user account',
+						data: user
+					})
+				})
+				.catch(next)
 		})
 		.catch(next)
 })
@@ -65,6 +75,18 @@ router.get('/authenticate', (req, res) => {
 			})
 		})
 })
+
+function checkIfDuplicate(newUser) {
+	Users.find({})
+		.then(users => {
+			users.forEach(user => {
+				if (user.email == newUser.email || user.username == newUser.username)
+					return false;
+			})
+
+			return true;
+		})
+}
 
 router.use('/', (err, req, res, next) => {
 	if (err) {
