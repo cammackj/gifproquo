@@ -7,7 +7,7 @@ var gifResponseSchema = new mongoose.Schema({
 	gifUrl: { type: String, required: true },
 	created: { type: Number },
 	votes: { type: Object, default: {} },
-	totalScore: {type: Number, default: 0}
+	totalScore: { type: Number, default: 0 }
 })
 
 var GifResponse = mongoose.model("GifResponse", gifResponseSchema);

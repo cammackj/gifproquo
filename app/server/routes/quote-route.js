@@ -37,9 +37,6 @@ router
 			}).catch(next)
 	})
 	.put('/:id/vote', (req, res, next) => {
-		if (!req.session.uid)
-			return res.send({ message: "You must be logged in to do that." })
-
 		let userVote = req.body.vote;
 		let userId = req.body.userId;
 		quotes.findById(req.params.id)

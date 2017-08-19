@@ -5,11 +5,6 @@ router.post('/register', (req, res, next) => {
 	var newUser = req.body
 	Users.find({})
 		.then(users => {
-			// users.forEach(user => {
-			// 	if (user.email == newUser.email || user.username == newUser.username)
-					// return res.send({ message: "User already exists" })
-			//})
-
 			Users.create(req.body)
 				.then(user => {
 					req.session.uid = user._id;

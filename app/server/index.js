@@ -24,7 +24,14 @@ server.use(bodyParser.urlencoded({ extended: true }));
 
 server.use(sessions);
 server.use('/', authRoutes);
-
+function authenticate(req, res, next) {
+	if (req.session.uid || req.method === 'GET') {
+		req.body.userId = req.session.uid;
+		return next();
+	}
+	return res.send(401, "please login to continue");
+}
+server.use('/', authenticate);
 server.use('/api/categories', categoryRoute);
 server.use('/api/comments', commentRoute);
 server.use('/api/gifResponses', gifResponseRoute);

@@ -1,6 +1,6 @@
 import $ from 'jquery'
-import vue from 'vue';
-
+import vue from 'vue'
+import Vuex from 'vuex'
 var state = {
 	results: [],
 	submissions: [],
@@ -66,10 +66,16 @@ let store = {
 			getGifs().then(cb)
 		})
 	},
-	createQuote(content) {
+	createQuote(content, cb) {
 		$.post('//localhost:3000/api/quotes', { content: content })
 			.then(data => {
-				console.log(data);
+				state.quotes.content = data.content
+				state.quotes.expired = data.expired
+				state.quotes.totalPoints = data.totalPoints
+				state.quotes.userId = data.userId
+				state.quotes._id = data._id
+				state.gifResponses = {}
+				cb();
 			})
 			.fail(data => {
 				console.log(data.message)

@@ -28,9 +28,6 @@ router
 	})
 	.post('/', (req, res, next) => {
 		// TODO: Check to see if quote is expired
-		// if (!req.session.uid)
-		// 	return res.send({ message: "You must be logged in to do that." })
-
 		gifResponses.create(req.body)
 			.then(gifResponse => {
 				gifResponse.created = Math.floor(Date.now() / 1000);
@@ -38,17 +35,17 @@ router
 			}).catch(next)
 	})
 	.put('/:id/vote', (req, res, next) => {
-		if (!req.session.uid)
-			return res.send({ message: "You must be logged in to do that." })
-
 		let userVote = req.body.vote;
 		let userId = req.body.userId;
 		gifResponses.findById(req.params.id)
 			.then(gifResponse => {
 				updateUserVote(gifResponse, userVote, userId)
-				gifResponse.save((err, todo) => {
-					res.send(gifResponse);
-				});
+				// gifResponse.save((err, todo) => {
+				gifResponses.findByIdAndUpdate(req.params.id, gifResponse)
+					.then(() => {
+						console.log(gifResponse)
+						res.send(gifResponse);
+					});
 			}).catch(next)
 	})
 
@@ -68,32 +65,32 @@ router
 	})
 
 function updateUserVote(gifResponse, userVote, userId) {
-	if (userVote) {
-		if (gifResponse.votes[userId] == 1) {
-			gifResponse.votes[userId] = 0
+	var votes = gifResponse.votes;
+	if (userVote == 1) {
+		if (votes[userId] == 1) {
+			votes[userId] = 0
 		} else {
-			gifResponse.votes[userId] = 1
+			votes[userId] = 1
 		}
 	} else {
-		if (gifResponse.votes[userId] == -1) {
-			gifResponse.votes[userId] = 0
+		if (votes[userId] == -1) {
+			votes[userId] = 0
 		} else {
-			gifResponse.votes[userId] = -1
+			votes[userId] = -1
 		}
 	}
-	getTotalPoints(gifResponse)
+	gifResponse.votes = votes;
+	getTotalScore(gifResponse);
 }
 
 // Total points for gifResponses.
-function getTotalPoints(gifResponse) {
+function getTotalScore(gifResponse) {
 	var total = 0;
 	for (vote in gifResponse.votes) {
 		total += gifResponse.votes[vote]
 	}
-	gifResponse.totalPoints = total
+	gifResponse.totalScore = total
 }
-
-
 
 // ERROR HANDLER
 router.use('/', (err, req, res, next) => {

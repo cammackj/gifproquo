@@ -13,7 +13,7 @@ store.on('error', error => {
 module.exports = session({
 	secret: "It's dangerous to go alone",
 	cookie: {
-		maxAge: 1000 * 60 * 15// 15 minutes (testing) * 60 * 24 * 7 // 1 week
+		maxAge: 1000 * 60 * 15* 60 * 24 * 7 // 1 week
 	},
 	store: store,
 	resave: true,
