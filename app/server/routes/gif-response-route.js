@@ -28,6 +28,9 @@ router
 			}).catch(next)
 	}) // api/galaxies/329409238/stars
 	.post('/', (req, res, next) => {
+		if (!req.session.uid)
+			return res.send({ message: "You must be logged in to do that." })
+
 		gifResponses.create(req.body)
 			.then(gifResponse => {
 				res.send(gifResponse)
@@ -41,11 +44,21 @@ router
 	// 		}).catch(next)
 	//})
 	.delete('/:id', (req, res, next) => {
-		gifResponses.findByIdAndRemove(req.params.id)
+		if (!req.session.uid)
+			return res.send({ message: "You must be logged in to do that." })
+		gifResponses.findById(req.params.id)
 			.then(gifResponse => {
-				res.send({ message: 'Successfully Removed' })
-			}).catch(next)
+				if (req.session.uid.toString() == quote.userId.toString()) {
+					gifResponse.remove()
+					res.send({ message: 'Successfully Removed' })
+				} else {
+					res.send({ message: 'You are not authorized to remove this response' })
+				}
+				}).catch(next)
 	})
+
+
+
 
 // ERROR HANDLER
 router.use('/', (err, req, res, next) => {

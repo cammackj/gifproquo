@@ -40,8 +40,14 @@ router
 	// 		}).catch(next)
 	//})
 	.delete('/:id', (req, res, next) => {
-		categories.findByIdAndRemove(req.params.id)
+		categories.findById(req.params.id)
 			.then(category => {
+				if (req.session.uid.toString() == quote.userId.toString()) {
+					category.remove()
+					res.send({ message: 'Successfully Removed' })
+				} else {
+					res.send({ message: 'You are not authorized to remove this response' })
+				}
 				res.send({ message: 'Successfully Removed' })
 			}).catch(next)
 	})

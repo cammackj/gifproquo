@@ -26,6 +26,9 @@ router
 			.catch(next)
 	})
 	.post('/', (req, res, next) => {
+		if (!req.session.uid)
+			return res.send({ message: "You must be logged in to do that." })
+
 		comments.create(req.body)
 			.then(comment => {
 				res.send(comment)
@@ -39,11 +42,21 @@ router
 	// 		}).catch(next)
 	//})
 	.delete('/:id', (req, res, next) => {
-		comments.findByIdAndRemove(req.params.id)
+		if (!req.session.uid) {
+			return res.send({ message: "You must be logged in to do that." })
+		}
+		comments.findById(req.params.id)
 			.then(comment => {
+				if (req.session.uid.toString() == quote.userId.toString()) {
+					comment.remove()
+					res.send({ message: 'Successfully Removed' })
+				} else {
+					res.send({ message: 'You are not authorized to remove this comment' })
+				}
 				res.send({ message: 'Successfully Removed' })
 			}).catch(next)
 	})
+
 
 // ERROR HANDLER
 router.use('/', (err, req, res, next) => {
