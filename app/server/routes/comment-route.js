@@ -31,16 +31,24 @@ router
 
 		comments.create(req.body)
 			.then(comment => {
+				comment.created = Math.floor(Date.now() / 1000);				
 				res.send(comment)
 			}).catch(next)
 	})
-	// .put('/:id', (req, res, next) => {
-	// 	var id = req.params.id
-	// 	stars.findByIdAndUpdate(id, req.body)
-	// 		.then(comment => {
-	// 			res.send({ message: 'Successfully Updated' })
-	// 		}).catch(next)
-	//})
+	.put('/:id/vote', (req, res, next) => {
+		if (!req.session.uid)
+			return res.send({ message: "You must be logged in to do that." })
+
+		let userVote = req.body.vote;
+		let userId = req.body.userId;
+		comments.findById(req.params.id)
+			.then(comment => {
+				updateUserVote(comment, userVote, userId)
+				comment.save((err, todo) => {
+					res.send(comment);
+				});
+			}).catch(next)
+	})
 	.delete('/:id', (req, res, next) => {
 		if (!req.session.uid) {
 			return res.send({ message: "You must be logged in to do that." })
@@ -56,6 +64,32 @@ router
 				res.send({ message: 'Successfully Removed' })
 			}).catch(next)
 	})
+
+function updateUserVote(comment, userVote, userId) {
+	if (userVote) {
+		if (comment.votes[userId] == 1) {
+			comment.votes[userId] = 0
+		} else {
+			comment.votes[userId] = 1
+		}
+	} else {
+		if (comment.votes[userId] == -1) {
+			comment.votes[userId] = 0
+		} else {
+			comment.votes[userId] = -1
+		}
+	}
+	getTotalPoints(comment)
+}
+
+// Total points for comments.
+function getTotalPoints(comment) {
+	var total = 0;
+	for (vote in comment.votes) {
+		total += comment.votes[vote]
+	}
+	comment.totalPoints = total
+}
 
 
 // ERROR HANDLER
