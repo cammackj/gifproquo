@@ -5,6 +5,7 @@ var state = {
   submissions: [],
   quotes: [{ content: "Loading..." }],
   gifResponses:[]
+
 }
 
 let store = {
@@ -53,6 +54,24 @@ let store = {
   $.get(`//localhost:3000/api/gifResponses/${gifId}/comments`).then(data=>{
 
   })
+  },
+  register(user){
+   
+    $.post('//localhost:3000/register', user).then(data=>{
+      console.log(data)
+    })
+    .fail(data=>{
+      console.log(data.message)
+    })
+  },
+  login(user){
+    $.post('//localhost:3000/login', user).then(data=>{
+      console.log(data)
+    })
+    .fail(data=>{
+      console.log(data.message)
+    })
+   
   }
 }
 

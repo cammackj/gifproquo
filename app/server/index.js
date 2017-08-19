@@ -13,7 +13,7 @@ var port = 3000;
 
 
 var cors = require('cors')
-server.options('*', cors())
+server.use('/', cors())
 //MIDDLEWARE
 // server.use(express.static(__dirname + "/"));
 server.use(bodyParser.json());

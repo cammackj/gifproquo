@@ -10,21 +10,21 @@
           <li><a @click="showRegister()">Create Account</a></li>
           <li><a>LeaderBoard</a></li>
           <li>
-            <div v-if="logIn" class="row">
+            <div v-if="viewLogIn" class="row">
               <div class="col m6 light-blue accent-4 login-box">
-                <form @submit.prevent="search()">
-                  <input type="text" placeholder="username" v-model="query">
-                  <input type="text" placeholder="password" v-model="query">
+                <form @submit.prevent="login()">
+                  <input type="text" placeholder="username" v-model="accountUser.username">
+                  <input type="text" placeholder="password" v-model="accountUser.password">
                   <button type="submit" class="btn">log in</button>
                 </form>
               </div>
             </div>
-            <div v-if="register" class="row">
+            <div v-if="viewRegister" class="row">
               <div class="col m6 light-blue accent-4 login-box">
-                <form @submit.prevent="search()">
-                  <input type="text" placeholder="username" v-model="query">
-                  <input type="text" placeholder="email" v-model="query">
-                  <input type="text" placeholder="password" v-model="query">
+                <form @submit.prevent="register()">
+                  <input type="text" placeholder="username" v-model="accountUser.username">
+                  <input type="text" placeholder="email" v-model="accountUser.email">
+                  <input type="text" placeholder="password" v-model="accountUser.password">
                   <button type="submit" class="btn">register</button>
                 </form>
               </div>
@@ -76,11 +76,16 @@
     },
     data() {
       return {
-        logIn: false,
-        register: false,
+        viewLogIn: false,
+        viewRegister: false,
         quotes: store.state.quotes,
         gifs: store.state.gifs,
-        quoteIndex: 0
+        quoteIndex: 0,
+        accountUser: {
+          username: '',
+          email: '',
+          password: ''
+        }
       }
     },
     mounted() {
@@ -88,12 +93,12 @@
     },
     methods: {
       showLogIn() {
-        this.logIn = !this.logIn
-        this.register = false
+        this.viewLogIn = !this.viewLogIn
+        this.viewRegister = false
       },
       showRegister() {
-        this.register = !this.register
-        this.logIn = false
+        this.viewRegister = !this.viewRegister
+        this.viewLogIn = false
       },
       getQuote() {
         store.getQuote(this.getGifs)
@@ -106,7 +111,15 @@
           this.quoteIndex += num
         }
         getGifs()
+      },
+      login(){
+         store.login(this.accountUser)
+      },
+      register(){
+      
+          store.register(this.accountUser)
       }
+    
     }
   }
 
