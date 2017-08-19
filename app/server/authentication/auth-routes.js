@@ -12,7 +12,6 @@ router.post('/register', (req, res, next) => {
 
 			Users.create(req.body)
 				.then(user => {
-					console.log('userCreated')
 					req.session.uid = user._id;
 					req.session.save();
 					user.password = null;
@@ -28,7 +27,6 @@ router.post('/register', (req, res, next) => {
 })
 
 router.post('/login', (req, res) => {
-	console.log(req.body)
 	Users.findOne({ username: req.body.username.toLowerCase() })
 		.then(user => {
 			user.validatePassword(req.body.password)

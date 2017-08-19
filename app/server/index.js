@@ -13,7 +13,10 @@ var port = 3000;
 
 
 var cors = require('cors')
-server.use('/', cors())
+server.use('/', cors({
+	origin: 'http://localhost:8080',
+	credentials: true
+}))
 //MIDDLEWARE
 // server.use(express.static(__dirname + "/"));
 server.use(bodyParser.json());

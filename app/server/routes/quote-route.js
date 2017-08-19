@@ -29,6 +29,7 @@ router
 	.post('/', (req, res, next) => {
 		if (!req.session.uid)
 			return res.send({ message: "You must be logged in to do that." })
+		req.body.userId = req.session.uid;
 		quotes.create(req.body)
 			.then(quote => {
 				quote.created = Math.floor(Date.now() / 1000);
