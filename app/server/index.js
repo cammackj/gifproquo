@@ -11,7 +11,6 @@ var userRoute = require('./routes/user-route')
 var server = express();
 var port = 3000;
 
-
 var cors = require('cors')
 server.use('/', cors({
 	origin: 'http://localhost:8080',

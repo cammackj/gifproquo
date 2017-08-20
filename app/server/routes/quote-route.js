@@ -9,7 +9,7 @@ router
 	.get('/', (req, res, next) => {
 		quotes.find({})
 			.then(quotes => {
-				res.send(quotes)
+				res.send(quotes[0])
 			})
 			.catch(next)
 	})
@@ -20,6 +20,28 @@ router
 			})
 			.catch(next)
 	})
+	.get('/:id/next', (req, res, next) => {
+		quotes.find({})
+			.then(quotes => {
+				let quoteIndex = quotes.findIndex(quote => quote._id == req.params.id)
+				if (quotes[quoteIndex + 1])
+					res.send(quotes[quoteIndex + 1]);
+				else
+					res.send(418, { success: false, error: "You've reached the end of the quotes" });
+			})
+			.catch(next);
+	})
+	.get('/:id/prev', (req, res, next) => {
+		quotes.find({})
+			.then(quotes => {
+				let quoteIndex = quotes.findIndex(quote => quote._id == req.params.id)
+				if (quotes[quoteIndex - 1])
+					res.send(quotes[quoteIndex - 1]);
+				else
+					res.send(418, { success: false, error: "You've reached the beginning of the quotes" });
+			})
+			.catch(next);
+	})
 	.get('/:id/gifResponses', (req, res, next) => {
 		gifResponses.find({ quoteId: req.params.id })
 			.then(gifResponses => {
@@ -27,8 +49,6 @@ router
 			}).catch(next)
 	})
 	.post('/', (req, res, next) => {
-		if (!req.session.uid)
-			return res.send({ message: "You must be logged in to do that." })
 		req.body.userId = req.session.uid;
 		quotes.create(req.body)
 			.then(quote => {
@@ -48,8 +68,6 @@ router
 			}).catch(next)
 	})
 	.delete('/:id', (req, res, next) => {
-		if (!req.session.uid)
-			return res.send({ message: "You must be logged in to do that." })
 		quotes.findById(req.params.id)
 			.then(quote => {
 				if (req.session.uid.toString() == quote.userId.toString()) {
@@ -60,7 +78,7 @@ router
 				}
 			}).catch(next)
 
-		// Below code to empty out database. DO NOT USE UNLESS YOU KNOW WHAT YOU'RE DOING
+		// Below code to empty out database of quotes. DO NOT USE UNLESS YOU KNOW WHAT YOU'RE DOING
 		// quotes.find({}).then(quotes => {
 		// 	quotes.forEach(quote => quote.remove())
 		// })

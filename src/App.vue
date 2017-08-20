@@ -34,21 +34,25 @@
 			</div>
 		</nav>
 
-		<QuoteCard :quote="quotes.content" class="fixed quote-card"></QuoteCard>
+		<QuoteCard :quote="quote.content" class="fixed quote-card"></QuoteCard>
 
 		<div class="row">
 			<div class="col m2 paginate-button">
-				<i @click="changeQuote(-1)" class="material-icons white-text fixed" style="font-size: 6vw">remove_circle_outline</i>
+				<i @click="getPrevQuote(quote._id)" class="material-icons white-text fixed action muted" style="font-size: 6vw">remove_circle_outline</i>
 			</div>
-			<div class="col m4 gif-card" v-for="gif in gifs">
-				<GifCard :gif="gif"></GifCard>
+			<div class="col m8 gif-card">
+				<div class="row">
+					<div class="col m6" v-for="gif in gifs">
+						<GifCard :gif="gif"></GifCard>
+					</div>
+				</div>
 			</div>
 			<div class="col m2 paginate-button">
-				<i @click="changeQuote(1)" class="material-icons white-text fixed" style="font-size: 6vw">add_circle_outline</i>
+				<i @click="getNextQuote(quote._id)" class="material-icons white-text fixed action muted" style="font-size: 6vw">add_circle_outline</i>
 			</div>
 		</div>
 
-		<SearchForm :quoteId="quotes._id"></SearchForm>
+		<SearchForm :quoteId="quote._id"></SearchForm>
 	</div>
 </template>
 
@@ -94,24 +98,23 @@
 			getGifs(quoteId) {
 				this.$store.dispatch('getGifs', quoteId)
 			},
-			changeQuote(num) {
-				if (this.quoteIndex + num >= 0) {
-					this.quoteIndex += num
-				}
-				getGifs()
+			getNextQuote(quoteId) {
+				this.$store.dispatch('getNextQuote', quoteId)
+			},
+			getPrevQuote(quoteId) {
+				this.$store.dispatch('getPrevQuote', quoteId)
 			},
 			login() {
 				this.$store.dispatch('login', this.accountUser)
 			},
 			register() {
-
 				this.$store.dispatch('register', this.accountUser)
 			}
 
 		},
 		computed: {
-			quotes() {
-				return this.$store.state.quotes
+			quote() {
+				return this.$store.state.quote
 			},
 			gifs() {
 				return this.$store.state.gifResponses
@@ -158,7 +161,19 @@
 		margin-top: 30vh;
 	}
 
-	.login-reg-box {
+	.bottom-fixed {
 		z-index: 100;
+	}
+
+	.action {
+		cursor: pointer;
+	}
+
+	.muted {
+		opacity: 0.8;
+	}
+
+	.muted:hover {
+		opacity: 1;
 	}
 </style>

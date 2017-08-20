@@ -1,13 +1,13 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import vue from 'vue'
+import vuex from 'vuex'
 import $ from 'jquery'
 
-Vue.use(Vuex)
+vue.use(vuex)
 
 var state = {
 	results: [],
 	submissions: [],
-	quotes: { content: "Loading..." },
+	quote: { content: "Loading..." },
 	gifResponses: []
 }
 
@@ -17,6 +17,7 @@ $.ajaxSetup({
 		withCredentials: true
 	}
 })
+
 var actions = {
 	search({ commit, dispatch }, query) {
 		var base = 'http://api.giphy.com/v1/gifs/'
@@ -42,8 +43,6 @@ var actions = {
 			url: '//localhost:3000/api/gifResponses/' + gifId + "/vote",
 			data: JSON.stringify({ vote: vote })
 		})
-
-			// $.put('//localhost:3000/api/gifResponses/' + gifId + "/vote", { vote: vote })
 			.then(data => {
 				commit('updateGifResponseScore', { gifId: data._id, score: data.totalScore });
 			})
@@ -51,16 +50,16 @@ var actions = {
 				console.log(data)
 			})
 	},
-	getQuote({ commit, dispatch }, cb) {
+	getQuote({ commit, dispatch }) {
 		$.get('//localhost:3000/api/quotes').then(data => {
-			commit('setQuotes', data[0]);
-			dispatch('getGifs', data[0]._id)
+			commit('setQuote', data);
+			dispatch('getGifs', data._id)
 		})
 	},
 	createQuote({ commit, dispatch }, content) {
 		$.post('//localhost:3000/api/quotes', { content: content })
 			.then(data => {
-				commit('setQuotes', data);
+				commit('setQuote', data);
 				commit('setGifResponses', [])
 			})
 			.fail(data => {
@@ -68,10 +67,32 @@ var actions = {
 			})
 
 	},
+	getNextQuote({ commit, dispatch }, quoteId) {
+		dispatch('getNewQuote', { isNext: true, quoteId: quoteId })
+	},
+	getPrevQuote({ commit, dispatch }, quoteId) {
+		dispatch('getNewQuote', { isNext: false, quoteId: quoteId })
+	},
+	getNewQuote({ commit, dispatch }, { isNext, quoteId }) {
+		let baseUrl = `//localhost:3000/api/quotes/${quoteId}/`
+		baseUrl += isNext ? 'next' : 'prev';
+		$.get(baseUrl)
+			.then(data => {
+				commit('setQuote', data);
+				dispatch('getGifs', data._id)
+			})
+			.fail(data => {
+				console.log(data)
+			})
+	},
 	getGifs({ commit, dispatch }, quoteId) {
-		return $.get(`//localhost:3000/api/quotes/${quoteId}/gifResponses`).then(data => {
-			commit('setGifResponses', data)
-		})
+		return $.get(`//localhost:3000/api/quotes/${quoteId}/gifResponses`)
+			.then(data => {
+				commit('setGifResponses', data)
+			})
+			.fail(data => {
+				console.log(data)
+			})
 	},
 	addGifResponse({ commit, dispatch }, { quoteId, gif }) {
 		gif.quoteId = quoteId;
@@ -108,8 +129,8 @@ var actions = {
 }
 
 var mutations = {
-	setQuotes(state, quotes) {
-		state.quotes = quotes;
+	setQuote(state, quote) {
+		state.quote = quote;
 	},
 	setGifResponses(state, responses) {
 		state.gifResponses = responses;
@@ -119,11 +140,11 @@ var mutations = {
 	},
 	updateGifResponseScore(state, { gifId, score }) {
 		var gifIndex = state.gifResponses.findIndex(gif => gif._id == gifId);
-		Vue.set(state.gifResponses[gifIndex], 'totalScore', score);
+		vue.set(state.gifResponses[gifIndex], 'totalScore', score);
 	}
 }
 
-export default new Vuex.Store({
+export default new vuex.Store({
 	state,
 	actions,
 	mutations

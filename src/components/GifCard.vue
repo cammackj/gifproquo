@@ -1,9 +1,7 @@
 <template>
 	<div class="GifCard">
-
 		<div class="card-action">
-
-			<div class="col m12">
+			<div>
 				<div class="hoverable card glass">
 					<div class="card-image">
 						<img :src="gif.gifUrl">
@@ -22,14 +20,11 @@
 					</div>
 				</div>
 			</div>
-
 		</div>
-
 	</div>
 </template>
 
 <script>
-	// import { store } from '../store'
 	export default {
 		name: 'GifCard',
 		props: ['gif'],
