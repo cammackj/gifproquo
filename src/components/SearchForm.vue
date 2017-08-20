@@ -86,6 +86,7 @@
 	.bottom-fixed {
 		position: fixed;
 		bottom: 0;
+		z-index: 100;
 	}
 
 	.image-result {

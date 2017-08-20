@@ -44,8 +44,10 @@
 			</div>
 			<div class="col m8 gif-card">
 				<div class="row">
-					<div class="col m6" v-for="gif in gifs">
-						<GifCard :gif="gif"></GifCard>
+					<div v-for="(gif, index) in gifs">
+						<GifCard class="col s12 m6 l4" :gif="gif"></GifCard>
+						<div v-if="(index + 1) % 2 == 0" class="clearfix hide-on-large-only hide-on-small-only"></div>
+						<div v-if="(index + 1) % 3 == 0" class="clearfix hide-on-med-and-down"></div>
 					</div>
 				</div>
 			</div>
