@@ -6,8 +6,10 @@
 			<div class="nav-wrapper light-blue accent-4">
 				<a href="#" class="brand-logo right">GifProQuo</a>
 				<ul id="nav-mobile" class="left">
-					<li><a @click="showLogIn()">Sign In</a></li>
-					<li><a @click="showRegister()">Create Account</a></li>
+					<li v-if="loggedIn"><a>{{username}}</a></li>
+					<li v-if="!loggedIn"><a @click="showLogIn()">Sign In</a></li>
+					<li v-if="!loggedIn"><a @click="showRegister()">Create Account</a></li>
+					<li v-if="loggedIn"><a @click="logOut()">Log Out</a></li>
 					<li><a>LeaderBoard</a></li>
 					<li>
 						<div v-if="viewLogIn" class="row">
@@ -77,10 +79,11 @@
 					username: '',
 					email: '',
 					password: ''
-				}
+				},
 			}
 		},
 		mounted() {
+			this.checkForUser()
 			this.getQuote()
 		},
 		methods: {
@@ -106,11 +109,18 @@
 			},
 			login() {
 				this.$store.dispatch('login', this.accountUser)
+				this.viewLogIn = false;
 			},
 			register() {
 				this.$store.dispatch('register', this.accountUser)
+				this.viewRegister = false;
+			},
+			checkForUser() {
+				this.$store.dispatch('checkForUser')
+			},
+			logOut() {
+				this.$store.dispatch('logOut')
 			}
-
 		},
 		computed: {
 			quote() {
@@ -118,6 +128,12 @@
 			},
 			gifs() {
 				return this.$store.state.gifResponses
+			},
+			loggedIn() {
+				return this.$store.state.loggedIn
+			},
+			username() {
+				return this.$store.state.username
 			}
 		}
 	}

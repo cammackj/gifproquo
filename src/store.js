@@ -8,7 +8,9 @@ var state = {
 	results: [],
 	submissions: [],
 	quote: { content: "Loading..." },
-	gifResponses: []
+	gifResponses: [],
+	username: '',
+	loggedIn: false
 }
 
 $.ajaxSetup({
@@ -109,10 +111,34 @@ var actions = {
 
 		})
 	},
-	register({ commit, dispatch }, user) {
-		$.post('//localhost:3000/register', user).then(data => {
-			console.log(data)
+	checkForUser({ commit, dispatch }) {
+		$.get('//localhost:3000/authenticate')
+			.then(data => {
+				if (data.data)
+					commit('setLoggedIn', { username: data.data.username, loggedIn: true })
+			})
+			.fail(data => {
+				console.log(data);
+			})
+	},
+	logOut({ commit, dispatch }) {
+		$.ajax({
+			method: 'DELETE',
+			contentType: 'application/json',
+			url: '//localhost:3000/logout/',
 		})
+			.then(data => {
+				commit('setLoggedIn', { username: '', loggedIn: false })
+			})
+			.fail(data => {
+				console.log(data)
+			})
+	},
+	register({ commit, dispatch }, user) {
+		$.post('//localhost:3000/register', user)
+			.then(data => {
+				commit('setLoggedIn', { username: data.data.username, loggedIn: true })
+			})
 			.fail(data => {
 				console.log(data.message)
 			})
@@ -120,7 +146,8 @@ var actions = {
 	login({ commit, dispatch }, user) {
 		$.post('//localhost:3000/login', user)
 			.then(data => {
-				console.log(data)
+				if (data.data)
+					commit('setLoggedIn', { username: data.data.username, loggedIn: true })
 			})
 			.fail(data => {
 				console.log(data.message)
@@ -141,6 +168,10 @@ var mutations = {
 	updateGifResponseScore(state, { gifId, score }) {
 		var gifIndex = state.gifResponses.findIndex(gif => gif._id == gifId);
 		vue.set(state.gifResponses[gifIndex], 'totalScore', score);
+	},
+	setLoggedIn(state, { username, loggedIn }) {
+		state.username = username;
+		state.loggedIn = loggedIn;
 	}
 }
 
