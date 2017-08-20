@@ -169,6 +169,7 @@
 	.quote-card {
 		margin-top: 8vh;
 		z-index: 95;
+		width: 100%;
 	}
 
 	.gif-card {

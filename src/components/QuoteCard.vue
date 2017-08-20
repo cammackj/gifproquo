@@ -1,20 +1,14 @@
 <template>
   <div class="QuoteCard">
-
-    
     <div class="row">
-      <div class="col m12 offset-m7 quote-column">
+      <div class="col m6 offset-m3 quote-column">
         <div class="hoverable card glass quote-card">
           <div class="card-content">
             <blockquote class="card-title quote">"{{quote}}" - unknown </blockquote>
-
           </div>
         </div>
       </div>
     </div>
-  </div>
-
-
   </div>
 </template>
 
@@ -40,6 +34,7 @@
     background: rgba(0, 0, 0, .5);
     color: white;
   }
+
   .quote-column {
     position: center;
   }
