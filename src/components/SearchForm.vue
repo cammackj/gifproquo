@@ -35,7 +35,7 @@
                     <div class="row">
                         <form @submit.prevent="createQuote()">
                             <div class="input-field">
-                                <div class="col md12"><input type="text" v-model="quoteContent"></div>
+                                <div class="col md12"><input type="text" maxlength="140" v-model="quoteContent"></div>
                                 <div class="col md2"><button type="submit" class="btn">Submit</button></div>
                             </div>
                         </form>
